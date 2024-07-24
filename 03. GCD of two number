@@ -2,7 +2,7 @@
 int main()
 {
 	int n1,n2,gcd,i;
-	printf("Nithyanandhan (192210692)\n");
+	printf("sai suryha (192210685)\n");
 	printf("Enter the first number:");
 	scanf("%d",&n1);
 	printf("Enter the second number:");
