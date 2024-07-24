@@ -1,0 +1,25 @@
+#include<stdio.h>
+int main()
+{
+	int num,result=0;
+	printf("Nithyanandhan (192210692)\n");
+	printf("Enter the number:");
+	scanf("%d",&num);
+	int n=num;
+	while (n !=0)
+	{
+		int ori=n%10;
+		result+= ori*ori*ori;
+		n=n/10;
+	}
+	if(num==result)
+	{
+		printf("Given number is Armstrong number");
+	}
+	else
+	{
+		printf("Given number is not Armstrong number");
+	}
+	return 0;
+	
+}
