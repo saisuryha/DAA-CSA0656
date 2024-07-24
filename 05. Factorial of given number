@@ -1,0 +1,15 @@
+#include<stdio.h>
+int main()
+{
+	int n;
+	printf("sai suryha(192210685)\n");
+	printf("Enter the positive number:");
+	scanf("%d",&n);
+	int sum=1;
+	for(int i=1;i<=n;i++)
+	{
+		sum*=i;
+	}
+	printf("Factorial of given number is: %d",sum);
+	return 0;
+}
