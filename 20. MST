@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct Edge {
+    int u, v, weight;
+} Edge;
+typedef struct Graph {
+    int vertices, edges;
+    Edge* edgeList;
+} Graph;
+Graph* createGraph(int vertices, int edges) {
+    Graph* graph = (Graph*)malloc(sizeof(Graph));
+    graph->vertices = vertices;
+    graph->edges = edges;
+    graph->edgeList = (Edge*)malloc(edges * sizeof(Edge));
+    return graph;
+}
+int findParent(int* parent, int vertex) {
+    if (parent[vertex] == vertex)
+        return vertex;
+    return findParent(parent, parent[vertex]);
+}
+void unionVertices(int* parent, int* rank, int u, int v) {
+    int uRoot = findParent(parent, u);
+    int vRoot = findParent(parent, v);
+
+    if (rank[uRoot] < rank[vRoot])
+        parent[uRoot] = vRoot;
+    else if (rank[uRoot] > rank[vRoot])
+        parent[vRoot] = uRoot;
+    else {
+        parent[vRoot] = uRoot;
+        rank[uRoot]++;
+    }
+}
+int compareEdges(const void* a, const void* b) {
+    Edge* edgeA = (Edge*)a;
+    Edge* edgeB = (Edge*)b;
+    return edgeA->weight - edgeB->weight;
+}
+void kruskal(Graph* graph) {
+    int* parent = (int*)malloc(graph->vertices * sizeof(int));
+    int* rank = (int*)malloc(graph->vertices * sizeof(int));
+    Edge* mstEdges = (Edge*)malloc((graph->vertices - 1) * sizeof(Edge));
+
+    for (int i = 0; i < graph->vertices; i++) {
+        parent[i] = i;
+        rank[i] = 0;
+    }
+
+    qsort(graph->edgeList, graph->edges, sizeof(Edge), compareEdges);
+
+    int mstEdgeCount = 0;
+    for (int i = 0; i < graph->edges; i++) {
+        int u = graph->edgeList[i].u;
+        int v = graph->edgeList[i].v;
+        int weight = graph->edgeList[i].weight;
+
+        if (findParent(parent, u) != findParent(parent, v)) {
+            mstEdges[mstEdgeCount].u = u;
+            mstEdges[mstEdgeCount].v = v;
+            mstEdges[mstEdgeCount].weight = weight;
+            mstEdgeCount++;
+
+            unionVertices(parent, rank, u, v);
+        }
+    }
+
+    printf("Minimum Spanning Tree Edges:\n");
+    for (int i = 0; i < mstEdgeCount; i++) {
+        printf("%d -- %d : %d\n", mstEdges[i].u, mstEdges[i].v, mstEdges[i].weight);
+    }
+
+    free(parent);
+    free(rank);
+    free(mstEdges);
+}
+
+int main() {
+    int vertices, edges;
+    printf("sai suryha (192210685)");
+    printf("Enter the number of vertices: ");
+    scanf("%d", &vertices);
+
+    printf("Enter the number of edges: ");
+    scanf("%d", &edges);
+
+    Graph* graph = createGraph(vertices, edges);
+
+    printf("Enter the edges (u v weight):\n");
+    for (int i = 0; i < edges; i++) {
+        scanf("%d %d %d", &graph->edgeList[i].u, &graph->edgeList[i].v, &graph->edgeList[i].weight);
+    }
+
+    kruskal(graph);
+
+    free(graph->edgeList);
+    free(graph);
+
+    return 0;
+}
